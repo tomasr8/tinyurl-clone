@@ -1,0 +1,21 @@
+version: '3'
+services:
+  nodejs:
+    build: .
+    ports:
+     - "8080:8080"
+    environment:
+     - PGPASSWORD=Monaco
+     - PGUSER=nodejs
+     - PGDATABASE=nodejs
+     - PGHOST=postgresql
+     - PGPORT=5432
+    depends_on:
+     - postgresql
+  postgresql:
+    build: ./db
+    volumes:
+     - tinyurl_db:/var/lib/postgresql
+
+volumes:
+ - tinyurl_db

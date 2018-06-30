@@ -1,0 +1,145 @@
+@charset "UTF-8";
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background-color: #fafafa;
+  color: #4d4d4d;
+}
+
+.container {
+  width: 600px;
+  height: auto;
+  margin: 200px auto 0 auto;
+  text-align: center;
+  font-family: Helvetica, sans-serif;
+}
+
+.url-form {
+  margin-top: 20px;
+}
+.url-form div {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+.url-form div input {
+  padding: 7px 18px;
+  font-size: 16px;
+}
+
+.url-form .url {
+  width: 84%;
+  order: 0;
+  border-radius: 8px 0 0 8px;
+  border: 1px solid #d9d9d9;
+  border-right: none;
+}
+.url-form .url:hover {
+  border: 1px solid #c2c2c2;
+  border-right: none;
+}
+.url-form input[type=submit] {
+  width: 16%;
+  order: 1;
+  border-radius: 0 8px 8px 0;
+  border: 1px solid #e36464;
+  background-color: #fff;
+  color: #e36464;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+.url-form input[type=submit]:hover {
+  background-color: #e36464;
+  color: #fff;
+}
+.url-form input[type=submit]:active {
+  background-color: #e88282;
+  border: 1px solid #e88282;
+  transition: none;
+  box-shadow: 0 5px 10px -1px #e36464 inset;
+}
+
+.output {
+  width: 320px;
+  margin: 0 auto;
+  margin-top: 50px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  height: auto;
+  border: 2px dashed #c2c2c2;
+  transition: all 0.3s;
+  background-color: #fafafa;
+  visibility: hidden;
+}
+.output .output-url {
+  width: 85%;
+  background-color: #fff;
+  order: 0;
+  font-size: 20px;
+  padding: 9px;
+  background-color: #fafafa;
+}
+.output .output-url:empty:before {
+  content: "​";
+}
+.output span:nth-child(2) {
+  width: 15%;
+}
+
+.copy-btn {
+  background-color: #fafafa;
+  box-shadow: 0;
+  border: none;
+  font-size: 20px;
+  padding: 0;
+  cursor: pointer;
+  transition: all 0.3s;
+  border: 0;
+  border-radius: 5px;
+  order: 1;
+  width: 36px;
+  height: 35px;
+}
+.copy-btn:hover {
+  background-color: #7a7a7a;
+  box-shadow: 0 -6px 5px 1px #666 inset;
+  color: #fafafa;
+}
+.copy-btn::-moz-focus-inner {
+  border: 0;
+}
+.copy-btn:active {
+  padding: 0;
+  background-color: #7a7a7a;
+  transition: none;
+  box-shadow: 0 6px 5px 1px #666 inset;
+  border: none;
+}
+
+.error-container {
+  text-align: left;
+  overflow: hidden;
+  font-size: 14px;
+}
+.error-container .error {
+  position: relative;
+  display: inline-block;
+  padding: 5px 18px;
+  transition: all 0.3s ease-in;
+  background-color: #e3b264;
+  border-radius: 0 0 7px 7px;
+  border: 0;
+  top: -32px;
+  left: 18px;
+}
+
+/*# sourceMappingURL=app.css.map */

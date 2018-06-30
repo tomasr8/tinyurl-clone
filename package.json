@@ -1,0 +1,22 @@
+{
+  "name": "tinyurl",
+  "version": "1.0.0",
+  "description": "tinyurl clone",
+  "main": "app.js",
+  "scripts": {
+    "sass": "sass ./public/app.scss ./public/app.css",
+    "start": "PGPASSWORD=Monaco PGUSER=nodejs PGDATABASE=tinyurl PGHOST=localhost PGPORT=6000 node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.16.3",
+    "pg": "^7.4.3",
+    "valid-url": "^1.0.9"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "mocha": "^5.2.0"
+  }
+}
