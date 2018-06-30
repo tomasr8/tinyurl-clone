@@ -17,7 +17,7 @@ const randIP = () =>
 const getRowValues = () =>
   `('${randURL(8)}', '${randURL(4)}', '${randISODate()}', '${randIP()}')`
 
-let output = "INSERT INTO urls(full_url, short_url, date_created, created_by) VALUES \n"
+let output = "\\c tinyurl\nINSERT INTO urls(full_url, short_url, date_created, created_by) VALUES\n"
 let values = Array.from({ length: 100 }).map(() => getRowValues())
 
 const data = output + values.join(",\n") + ";"

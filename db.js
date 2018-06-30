@@ -102,7 +102,7 @@ module.exports = db => {
     const query = {
       name: "fetch-url",
       text: "SELECT short_url FROM urls WHERE full_url = $1",
-      value: [url]
+      values: [url]
     }
   
     return client.query(query)
@@ -120,58 +120,3 @@ module.exports = db => {
     insertURLTransaction
   }
 }
-
-// async function insertURL(db, url) {
-//   const client = await db.connect()
-//   console.log("connected")
-
-//   try {
-//     await client.query("BEGIN")
-
-//     const insert = {
-//       name: "insert-url",
-//       text: "INSERT INTO urls(full_url) VALUES($1) RETURNING id",
-//       values: [url]
-//     }
-
-//     const { rows: [{ id }] } = await client.query(insert)
-//     const shortURL = base62.encode(id + ID_OFFSET)
-//     await client.query("UPDATE urls SET short_url = $1 WHERE id = $2", [shortURL, id])
-
-//     await client.query("COMMIT")
-
-//     return shortURL
-//   } catch (err) {
-//     await client.query("ROLLBACK")
-//     throw err
-//   } finally {
-//     client.release()
-//   }
-// }
-
-// class Transaction {
-//   constructor(db) {
-//     this.db = db
-//     this.client = null
-//   }
-
-//   begin() {
-//     return this.db.connect()
-//       .then(client => this.client = client)
-//       .then(client => client.query("BEGIN"))
-//   }
-
-//   commit() {
-//     return this.client.query("COMMIT")
-//   }
-
-//   rollback() {
-//     return this.client.query("ROLLBACK")
-//   }
-
-//   query(query) {
-//     return this.client.query(query)
-//   }
-// }
-
-

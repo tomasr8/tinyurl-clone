@@ -33,22 +33,21 @@ app.get("/:short", (req, res) => {
     })
     .catch(err => {
       res.status(500).sendFile("./public/500.html", { root: __dirname })
-      console.error(err)
     })
 })
 
 app.post("/shorten", (req, res) => {
   let url = req.body.url
 
-  console.log(url)
+  if(!url.startsWith("http://") && !url.startsWith("https://")) {
+    url = "http://" + url
+  }
 
   if(!isValidURL(url)) {
     return res.status(400).json({ "error": "Invalid URL" })
   }
 
-  console.log(url)
   const ip = req.ip
-  console.log(ip)
 
   dbUtils.insertURLTransaction(url, ip)
     .then(({ shortURL, error }) => {
@@ -60,7 +59,6 @@ app.post("/shorten", (req, res) => {
     })
     .catch(err => {
       res.status(500).json({ error: "Something went wrong when contacting the DB" })
-      console.error(err)
     })
 })
 
@@ -78,10 +76,6 @@ process.on("SIGTERM", () => {
 })
 
 function isValidURL(url) {
-  if(!url.startsWith("http://") && !url.startsWith("https://")) {
-    url = "http://" + url
-  }
-
   return isHttpUri(url) || isHttpsUri(url)
 }
 
