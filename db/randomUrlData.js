@@ -11,16 +11,18 @@ const randURL = (length) => `http://${randWord(length)}.com`
 const randISODate = () =>
   `${rand(1971, 2018)}-${padDate(rand(1, 12))}-${padDate(rand(1, 28))} ${padDate(rand(0, 23))}:${padDate(rand(0, 59))}:${padDate(rand(1, 59))}`
 // INSERT INTO urls(full_url, short_url, date_created, created_by)
-const randIP = () =>
-  `${rand(0, 255)}.${rand(0, 255)}.${rand(0, 255)}.${rand(0, 255)}`
+const randForeignKey = () =>
+  `${rand(1, 100)}}`
 
-const getRowValues = () =>
-  `('${randURL(8)}', '${randURL(4)}', '${randISODate()}', '${randIP()}')`
+const createRow = () =>
+  `('${randURL(8)}', '${randURL(4)}', '${randISODate()}', ${randForeignKey()})`
 
-let output = "\\c tinyurl\nINSERT INTO urls(full_url, short_url, date_created, created_by) VALUES\n"
-let values = Array.from({ length: 100 }).map(() => getRowValues())
+const output = `\\c tinyurl
+  INSERT INTO urls(full_url, short_url, date_created, created_by) VALUES
+  `
+const values = Array.from({ length: 100 }).map(() => createRow())
 
 const data = output + values.join(",\n") + ";"
 const fs = require("fs")
 
-fs.writeFileSync("./test_data.sql", data, { encoding: "utf8" })
+fs.writeFileSync("./test_data_02.sql", data, { encoding: "utf8" })
