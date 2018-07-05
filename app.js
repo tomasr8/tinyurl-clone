@@ -4,8 +4,9 @@ const { Pool } = require("pg")
 const { isHttpUri, isHttpsUri } = require("valid-url")
 const base62 = require("./base62")
 
-const pool = new Pool()
-const dbUtils = require("./db")(pool)
+const db = new Pool()
+const { fetchUrl } = require("./db_fetch_url")
+const { insertUrlTransaction } = require("./db_insert_url")
 
 const app = express()
 
@@ -23,7 +24,7 @@ app.get("/:short", (req, res) => {
   const short = req.params.short
   const id = base62.decode(short)
 
-  dbUtils.fetchURL(id)
+  fetchUrl(db, id)
     .then(url => {
       if(url === null) {
         res.status(404).sendFile("./public/404.html", { root: __dirname })
@@ -49,7 +50,7 @@ app.post("/shorten", (req, res) => {
 
   const ip = req.ip
 
-  dbUtils.insertURLTransaction(url, ip)
+  insertUrlTransaction(db, url, ip)
     .then(({ shortURL, error }) => {
       if(error) {
         res.status(400).json({ error })

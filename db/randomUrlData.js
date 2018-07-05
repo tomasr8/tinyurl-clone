@@ -12,7 +12,7 @@ const randISODate = () =>
   `${rand(1971, 2018)}-${padDate(rand(1, 12))}-${padDate(rand(1, 28))} ${padDate(rand(0, 23))}:${padDate(rand(0, 59))}:${padDate(rand(1, 59))}`
 // INSERT INTO urls(full_url, short_url, date_created, created_by)
 const randForeignKey = () =>
-  `${rand(1, 100)}}`
+  `${rand(1, 100)}`
 
 const createRow = () =>
   `('${randURL(8)}', '${randURL(4)}', '${randISODate()}', ${randForeignKey()})`
