@@ -1,26 +1,29 @@
+const { encodeId } = require("../tag")
+
 const padDate = (date) => date.toString().length === 1 ? "0" + date : date
 
-const rand = (min, max) =>
-  Math.floor(Math.random() * (max - min + 1)) + min
-
+const randInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min
 const randWord = (length) =>
-  Array.from({ length }).map(() => String.fromCharCode(rand(65, 90))).join("")
-
+  Array.from({ length }).map(() => String.fromCharCode(randInt(65, 90))).join("")
 const randURL = (length) => `http://${randWord(length)}.com`
-
+const randForeignKey = () => `${randInt(1, 100)}`
 const randISODate = () =>
-  `${rand(1971, 2018)}-${padDate(rand(1, 12))}-${padDate(rand(1, 28))} ${padDate(rand(0, 23))}:${padDate(rand(0, 59))}:${padDate(rand(1, 59))}`
-// INSERT INTO urls(full_url, short_url, date_created, created_by)
-const randForeignKey = () =>
-  `${rand(1, 100)}`
+  `${randInt(1971, 2018)}-${padDate(randInt(1, 12))}-${padDate(randInt(1, 28))} ` +
+  `${padDate(randInt(0, 23))}:${padDate(randInt(0, 59))}:${padDate(randInt(1, 59))}`
 
-const createRow = () =>
-  `('${randURL(8)}', '${randURL(4)}', '${randISODate()}', ${randForeignKey()})`
+const createRow = (index) => {
+  const url = randURL(8)
+  const tag = encodeId(index)
+  const date = randISODate()
+  const fKey = randForeignKey()
+
+  return `('${url}', '${tag}', '${date}', ${fKey})`
+}
 
 const output = `\\c tinyurl
-  INSERT INTO urls(full_url, short_url, date_created, created_by) VALUES
+  INSERT INTO urls(url, tag, date_created, created_by) VALUES
   `
-const values = Array.from({ length: 100 }).map(() => createRow())
+const values = Array.from({ length: 100 }).map((_, i) => createRow(i + 1))
 
 const data = output + values.join(",\n") + ";"
 const fs = require("fs")
