@@ -2,7 +2,6 @@
 const express = require("express")
 const { Pool } = require("pg")
 const { isHttpUri, isHttpsUri } = require("valid-url")
-const base62 = require("./base62")
 
 const db = new Pool()
 const { fetchUrl } = require("./db_fetch_url")
@@ -71,7 +70,7 @@ const server = app.listen(8080, "0.0.0.0")
 process.on("SIGTERM", () => {
   console.log("Received SIGTERM")
   server.close(() => {
-    pool.end().then(() => process.exit(0))
+    db.end().then(() => process.exit(0))
   })
 })
 
