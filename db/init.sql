@@ -26,6 +26,7 @@ CREATE UNIQUE INDEX urls_url_idx ON urls(url);
 CREATE UNIQUE INDEX urls_tag_idx ON urls(tag);
 CREATE INDEX urls_created_by_idx ON urls(created_by);
 
+GRANT ALL PRIVILEGES ON TABLE ips TO nodejs;
 GRANT ALL PRIVILEGES ON TABLE urls TO nodejs;
 GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO nodejs;
 

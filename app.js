@@ -4,6 +4,7 @@ const { Pool } = require("pg")
 const { isHttpUri, isHttpsUri } = require("valid-url")
 
 const db = new Pool()
+const { LIMIT_MAX } = require("./db")
 const { fetchUrl } = require("./db_fetch_url")
 const { insertUrlTransaction } = require("./db_insert_url")
 
@@ -37,7 +38,7 @@ app.get("/:tag", (req, res) => {
 
 app.post("/shorten", (req, res) => {
   let url = req.body.url
-
+  console.log("requested url:", url)
   if(!url.startsWith("http://") && !url.startsWith("https://")) {
     url = "http://" + url
   }
@@ -47,16 +48,19 @@ app.post("/shorten", (req, res) => {
   }
 
   const ip = req.ip
-
+  console.log("starting transaction")
   insertUrlTransaction(db, url, ip)
-    .then(({ shortURL, error }) => {
+    .then(({ error, tag, remaining }) => {
       if(error) {
         res.status(400).json({ error })
       } else {
-        res.status(200).json({ shortURL })
+        res.header("X-RateLimit-Limit", LIMIT_MAX)
+        res.header("X-RateLimit-Remaining", remaining) 
+        res.status(200).json({ tag })
       }
     })
     .catch(err => {
+      console.log("transaction error", err)
       res.status(500).json({ error: "Something went wrong when contacting the DB" })
     })
 })

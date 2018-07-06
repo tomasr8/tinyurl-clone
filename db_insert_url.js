@@ -11,38 +11,39 @@ function insertUrlTransaction(db, url, ip) {
     }
 
     await insertNewIP(client, ip)
-    const ipId = await fetchIpId(ip)
+    const ipId = await fetchIpId(client, ip)
     // lock the current ip to prevent reace conditions
-    await lockIpRow(ipId)
+    await lockIpRow(client, ipId)
 
-    if (!await isBelowPostLimit(client, ip)) {
+    const posts = await countPosts(client, ipId)
+    if (posts >= LIMIT_MAX) {
       return { error: "Post limit exceeded" }
     }
 
     // get the row primary key
-    const urlId = await insertUrl(client, url, ip)
+    const urlId = await insertUrl(client, url, ipId)
     // compute short url from primary key
     tag = encodeId(urlId)
 
     await setTag(client, tag, urlId)
 
     // this return value is propagated from the tx() function as well
-    return { tag }
+    return { tag, remaining: LIMIT_MAX - posts - 1 }
   })
 }
 
-function isBelowPostLimit(client, id) {
+function countPosts(client, id) {
   const query = {
-    name: "is-below-post-limit",
+    name: "count-posts",
     "text": `SELECT COUNT(*) as count FROM urls
                 LEFT JOIN ips
+                ON urls.created_by = ips.id
                 WHERE ips.id = $1 AND date_created > now() - '${LIMIT_INTERVAL}'::interval;`,
     "values": [id]
   }
 
   return client.query(query)
     .then(readSingleValue("count"))
-    .then(count => count < LIMIT_MAX)
 }
 
 function setTag(client, url, id) {
