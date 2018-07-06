@@ -4,10 +4,10 @@ const { tx, readSingleValue, LIMIT_INTERVAL, LIMIT_MAX } = require("./db")
 function insertUrlTransaction(db, url, ip) {
   return tx(db, async function insertURL(client) {
 
-    let shortUrl = await fetchShortUrl(client, url)
+    let tag = await fetchTag(client, url)
     // shortened URL already exists
-    if (shortUrl !== null) {
-      return { shortUrl }
+    if (tag !== null) {
+      return { tag }
     }
 
     await insertNewIP(client, ip)
@@ -20,13 +20,14 @@ function insertUrlTransaction(db, url, ip) {
     }
 
     // get the row primary key
-    const urlId = await insertFullUrl(client, url, ip)
+    const urlId = await insertUrl(client, url, ip)
     // compute short url from primary key
-    shortUrl = encodeId(urlId)
+    tag = encodeId(urlId)
 
-    await setShortUrl(client, shortUrl, urlId)
+    await setTag(client, tag, urlId)
 
-    return { shortUrl }
+    // this return value is propagated from the tx() function as well
+    return { tag }
   })
 }
 
@@ -44,20 +45,20 @@ function isBelowPostLimit(client, id) {
     .then(count => count < LIMIT_MAX)
 }
 
-function setShortUrl(client, url, id) {
+function setTag(client, url, id) {
   const query = {
-    name: "update-short-url",
-    text: "UPDATE urls SET short_url = $1 WHERE id = $2",
+    name: "set-tag",
+    text: "UPDATE urls SET tag = $1 WHERE id = $2",
     values: [url, id]
   }
 
   return client.query(query)
 }
 
-function insertFullUrl(client, url, id) {
+function insertUrl(client, url, id) {
   const query = {
-    name: "insert-full-url",
-    text: "INSERT INTO urls(full_url, created_by) VALUES($1, $2) RETURNING id",
+    name: "insert-url",
+    text: "INSERT INTO urls(url, created_by) VALUES($1, $2) RETURNING id",
     values: [url, id]
   }
 
@@ -65,15 +66,15 @@ function insertFullUrl(client, url, id) {
     .then(readSingleValue("id"))
 }
 
-function fetchShortUrl(client, url) {
+function fetchTag(client, url) {
   const query = {
-    name: "fetch-url",
-    text: "SELECT short_url FROM urls WHERE full_url = $1",
+    name: "fetch-tag",
+    text: "SELECT tag FROM urls WHERE url = $1",
     values: [url]
   }
 
   return client.query(query)
-    .then(readSingleValue("short_url"))
+    .then(readSingleValue("tag"))
 }
 
 function insertNewIP(client, ip) {

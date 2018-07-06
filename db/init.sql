@@ -13,8 +13,8 @@ CREATE UNIQUE INDEX ips_ip_idx ON ips(ip);
 
 CREATE TABLE urls(
   id serial PRIMARY KEY,
-  short_url varchar,
-  full_url varchar,
+  url varchar,
+  tag varchar,
   date_created timestamp NOT NULL DEFAULT now(),
   -- created_by inet NOT NULL
   created_by integer,
@@ -22,8 +22,8 @@ CREATE TABLE urls(
       REFERENCES ips(id)
 );
 
-CREATE UNIQUE INDEX urls_short_url_idx ON urls(short_url);
-CREATE UNIQUE INDEX urls_full_url_idx ON urls(full_url);
+CREATE UNIQUE INDEX urls_url_idx ON urls(url);
+CREATE UNIQUE INDEX urls_tag_idx ON urls(tag);
 CREATE INDEX urls_created_by_idx ON urls(created_by);
 
 GRANT ALL PRIVILEGES ON TABLE urls TO nodejs;
