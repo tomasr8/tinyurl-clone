@@ -20,11 +20,10 @@ app.get("/", (req, res) => {
   res.sendFile("./public/index.html", { root: __dirname })
 })
 
-app.get("/:short", (req, res) => {
-  const short = req.params.short
-  const id = base62.decode(short)
+app.get("/:tag", (req, res) => {
+  const tag = req.params.tag
 
-  fetchUrl(db, id)
+  fetchUrl(db, tag)
     .then(url => {
       if(url === null) {
         res.status(404).sendFile("./public/404.html", { root: __dirname })

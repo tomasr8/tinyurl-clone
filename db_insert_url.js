@@ -1,9 +1,5 @@
-const base62 = require("./base62")
-const { tx, readSingleValue, ID_OFFSET, LIMIT_INTERVAL, LIMIT_MAX } = require("./db")
-
-function createShortUrl(id) {
-  return base62.encode(id + ID_OFFSET)
-}
+const { encodeId } = require("./tag")
+const { tx, readSingleValue, LIMIT_INTERVAL, LIMIT_MAX } = require("./db")
 
 function insertUrlTransaction(db, url, ip) {
   return tx(db, async function insertURL(client) {
@@ -26,7 +22,7 @@ function insertUrlTransaction(db, url, ip) {
     // get the row primary key
     const urlId = await insertFullUrl(client, url, ip)
     // compute short url from primary key
-    shortUrl = createShortUrl(urlId)
+    shortUrl = encodeId(urlId)
 
     await setShortUrl(client, shortUrl, urlId)
 

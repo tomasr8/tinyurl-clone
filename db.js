@@ -1,4 +1,3 @@
-const ID_OFFSET = 10000
 const LIMIT_INTERVAL = "1 hour"
 const LIMIT_MAX = 10
 
@@ -26,7 +25,6 @@ function readSingleValue(keyName) {
 module.exports = {
   tx,
   readSingleValue,
-  ID_OFFSET,
   LIMIT_INTERVAL,
   LIMIT_MAX
 }

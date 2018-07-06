@@ -1,10 +1,13 @@
-const { readSingleValue, ID_OFFSET } = require("./db")
+const { decodeTag } = require("./tag")
+const { readSingleValue } = require("./db")
 
-function fetchUrl(client, id) {
+function fetchUrl(client, tag) {
+  const id = decodeTag(tag)
+
   const query = {
     name: "fetch-url",
     text: "SELECT full_url FROM urls WHERE id = $1",
-    values: [id - ID_OFFSET]
+    values: [id]
   }
 
   return client.query(query)
