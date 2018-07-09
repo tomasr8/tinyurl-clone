@@ -6,7 +6,7 @@ class DBBase {
   }
 
   close() {
-    this.db.close()
+    this.db.end()
   }
 
   readSingleValue(keyName) {

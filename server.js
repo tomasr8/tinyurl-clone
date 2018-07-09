@@ -18,7 +18,7 @@ function createApp(db) {
 
   app.get("/:tag", (req, res) => {
     const tag = req.params.tag
-  
+
     db.fetchUrl(tag)
       .then(url => {
         if(url === null) {
@@ -28,7 +28,7 @@ function createApp(db) {
         }
       })
       .catch(err => {
-        console.err(err)
+        console.error(err)
         res.status(500).sendFile("./public/500.html", { root: __dirname })
       })
   })

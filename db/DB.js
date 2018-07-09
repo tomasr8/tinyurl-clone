@@ -1,4 +1,4 @@
-const { decodeTag, encodeId } = require("./tag")
+const { decodeTag, encodeId } = require("../tag")
 const DBBase = require("./DBBase")
 const { postLimit, postInterval } = require("../config")
 const Transaction = require("./Transaction")
@@ -23,7 +23,7 @@ class DB extends DBBase {
 
   insertNewRow(url, ip) {
     const tx = new Transaction(this.db)
-    return tx.execute(async function(client) {
+    return tx.execute((async function(client) {
   
       let tag = await this.fetchTag(client, url)
       // shortened URL already exists
@@ -50,7 +50,7 @@ class DB extends DBBase {
   
       // this return value is propagated from the tx() function as well
       return { tag, remaining: postLimit - posts - 1 }
-    })
+    }).bind(this))
   }
 
   countPosts(client, id) {
