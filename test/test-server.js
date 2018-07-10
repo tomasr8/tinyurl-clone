@@ -1,11 +1,8 @@
 const chai = require("chai")
 let rq = require("request")
-// const chaiHttp = require("chai-http")
 const { expect } = chai
 const createApp = require("../server")
 const DB = require("../db/DB")
-
-// chai.use(chaiHttp)
 
 process.env.PGPASSWORD = "Monaco"
 process.env.PGUSER = "nodejs"
@@ -23,18 +20,6 @@ const request = (...args) => {
     }) 
   })
 }
-
-// const post = request.post.bind(request)
-// request.post = function(...args) {
-//   return new Promise((resolve, reject) => {
-//     post(...args, (err, res, body) => {
-//       if(err) {
-//         return reject(err)
-//       }
-//       resolve([res, body])
-//     }) 
-//   })
-// }
 
 let db, app, server
 
@@ -67,7 +52,20 @@ describe("HTTP requests", function() {
       const { tag } = JSON.parse(body);
       [res, body] = await request({ url: "http://localhost:8080/" + tag, followRedirect: false })
       expect(res.statusCode).to.equal(302)
+    })
 
+    it("should enforce post limit", async function() {
+      const { postLimit } = require("../config")
+
+      for(let i = 1; i < postLimit; i++) {
+        const url = String.fromCharCode(i + 65) + "cz"
+        const [res, ] = await request({ method: "POST", url: "http://localhost:8080/shorten", form: { url }})
+        expect(res.statusCode).to.equal(200)
+      }
+
+      const url = String.fromCharCode(postLimit + 65) + "cz"
+      const [res, ] = await request({ method: "POST", url: "http://localhost:8080/shorten", form: { url }})
+      expect(res.statusCode).to.equal(400)
     })
   })
 })

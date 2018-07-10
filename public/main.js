@@ -14,7 +14,7 @@ $(document).ready(() => {
       },
       method: "POST",
     }).then(res => res.json())
-      .then(({ shortURL, error }) => {
+      .then(({ tag, error }) => {
         if (error) {
           console.error(error)
           $(".error-container .error").css("transition", "all 0.3s ease-out")
@@ -24,7 +24,7 @@ $(document).ready(() => {
         } else {
           const host = document.URL.startsWith("http") ?
             document.URL.slice(7) : document.URL.slice(8)
-          $(".output .output-url").text(`${host}${shortURL}`)
+          $(".output .output-url").text(`${host}${tag}`)
           $(".error-container .error").css("transition", "all 0.3s ease-in")
           $(".error-container .error").css("top", "-32px")
           $(".output").css("visibility", "visible")

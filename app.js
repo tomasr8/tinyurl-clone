@@ -18,6 +18,6 @@ process.on("SIGINT", () => {
 
 function stopServer(server, db) {
   server.close(() => {
-    db.end().then(() => process.exit(0))
+    db.close().then(() => process.exit(0))
   })
 }

@@ -17,6 +17,7 @@ function createApp(db) {
   })
 
   app.get("/:tag", (req, res) => {
+    console.log("request")
     const tag = req.params.tag
 
     db.fetchUrl(tag)
@@ -34,6 +35,7 @@ function createApp(db) {
   })
 
   app.post("/shorten", (req, res) => {
+    console.log("request")
     let url = req.body.url
 
     if(!url.startsWith("http://") && !url.startsWith("https://")) {
