@@ -2,7 +2,6 @@ const express = require("express")
 const { isHttpUri, isHttpsUri } = require("valid-url")
 const { postLimit } = require("./config")
 
-
 function createApp(db) {
   const app = express()
 

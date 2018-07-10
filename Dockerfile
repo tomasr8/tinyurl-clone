@@ -8,4 +8,10 @@ COPY . .
 
 EXPOSE 8080
 
-CMD ["npm", "start"]
+ENV PGPASSWORD=Monaco
+ENV PGUSER=nodejs
+ENV PGDATABASE=tinyurl
+ENV PGHOST=localhost
+ENV PGPORT=6000
+
+CMD ["node", "app.js"]
