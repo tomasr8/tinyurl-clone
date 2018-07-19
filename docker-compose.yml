@@ -7,7 +7,7 @@ services:
     environment:
      - PGPASSWORD=Monaco
      - PGUSER=nodejs
-     - PGDATABASE=nodejs
+     - PGDATABASE=tinyurl
      - PGHOST=postgresql
      - PGPORT=5432
     depends_on:
